@@ -108,7 +108,7 @@ class MagePal_GoogleTagManager_Model_DataLayer extends Mage_Core_Model_Abstract 
 
             $product = array();
             $product['id'] = $_product->getId();
-            $product['sku'] = $_product->getSku();
+            $product['sku'] = $_product->getSkuGoogle();
             $product['name'] = $_product->getName();
             // $this->addVariable('productPrice', $_product->getPrice());
             $this->addVariable('product', $product);
@@ -153,8 +153,12 @@ class MagePal_GoogleTagManager_Model_DataLayer extends Mage_Core_Model_Abstract 
             
             // set items
             foreach($quote->getAllVisibleItems() as $item){
+	
+		$product = Mage::getModel('catalog/product')->load($item->getProduct()->getId());
+		$sku = $product->getSkuGoogle();
+	
                 $items[] = array(
-                    'sku' => $item->getSku(),
+                    'sku' => $sku,
                     'name' => $item->getName(),
                     'price' => $this->formatPrice($item->getPrice()),
                     'quantity' => $item->getQty()

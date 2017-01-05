@@ -61,8 +61,12 @@ class MagePal_GoogleTagManager_Block_Tm extends Mage_Core_Block_Template
         foreach ($collection as $order) {
 
             foreach ($order->getAllVisibleItems() as $item) {
+
+		$product = Mage::getModel('catalog/product')->load($item->getProduct()->getId());
+                $sku = $product->getSkuGoogle();
+
                 $product[] = array(
-                    'sku' => $item->getSku(),
+                    'sku' => $sku,
                     'name' => $item->getName(),
                     'price' => $item->getBasePrice(),
                     'quantity' => $item->getQtyOrdered()
