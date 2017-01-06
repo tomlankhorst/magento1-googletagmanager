@@ -110,7 +110,8 @@ class MagePal_GoogleTagManager_Model_DataLayer extends Mage_Core_Model_Abstract 
             $product['id'] = $_product->getId();
             $product['sku'] = $_product->getSkuGoogle();
             $product['name'] = $_product->getName();
-            // $this->addVariable('productPrice', $_product->getPrice());
+            $this->addVariable('productPrice', (float)$_product->getFinalPrice());
+	    $this->addVariable('productSku', $_product->getSkuGoogle());
             $this->addVariable('product', $product);
         }
 
@@ -155,18 +156,17 @@ class MagePal_GoogleTagManager_Model_DataLayer extends Mage_Core_Model_Abstract 
             foreach($quote->getAllVisibleItems() as $item){
 	
 		$product = Mage::getModel('catalog/product')->load($item->getProduct()->getId());
-		$sku = $product->getSkuGoogle();
 	
                 $items[] = array(
-                    'sku' => $sku,
-                    'name' => $item->getName(),
-                    'price' => $this->formatPrice($item->getPrice()),
+                    'sku' => $product->getSkuGoogle(),
+                    'name' => $product->getName(),
+                    'price' => (float)$product->getFinalPrice(),
                     'quantity' => $item->getQty()
                 );
             }
             
             $cart['items'] = $items;
-            $cart['total'] = $this->formatPrice($quote->getGrandTotal());
+            $cart['total'] = (float)$quote->getGrandTotal();
             $cart['itemCount'] = $quote->getItemsCount();
             
             
@@ -201,12 +201,4 @@ class MagePal_GoogleTagManager_Model_DataLayer extends Mage_Core_Model_Abstract 
         return $this->_quote;
     }
     
-    public function formatPrice($price){
-        return Mage::getModel('directory/currency')->format(
-            $price, 
-            array('display'=>Zend_Currency::NO_SYMBOL), 
-            false
-        );
-    }
-
 }

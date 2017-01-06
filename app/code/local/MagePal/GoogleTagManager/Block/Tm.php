@@ -68,7 +68,7 @@ class MagePal_GoogleTagManager_Block_Tm extends Mage_Core_Block_Template
                 $product[] = array(
                     'sku' => $sku,
                     'name' => $item->getName(),
-                    'price' => $item->getBasePrice(),
+                    'price' => $item->getFinalPrice(),
                     'quantity' => $item->getQtyOrdered()
                 );
             }
